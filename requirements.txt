@@ -1,0 +1,8 @@
+nltk
+pandas
+scikit-learn
+xgboost
+protobuf
+fastapi
+pydantic
+uvicorn

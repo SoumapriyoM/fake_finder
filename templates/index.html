@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake News Detection</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="max-w-2xl mx-auto py-8">
+        <h1 class="text-3xl font-bold text-center mb-6">Fake News Detection</h1>
+        <form id="predictForm" class="space-y-4">
+            <label for="text" class="text-lg">Enter the news text:</label>
+            <textarea name="text" id="text" class="w-full h-32 px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"></textarea>
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:border-blue-300">Predict</button>
+        </form>
+        <div id="result" class="text-center text-lg font-bold mt-8"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#predictForm').on('submit', function(event) {
+                event.preventDefault();
+                var text = $('#text').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/predict',
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify({'news': text}),
+                    success: function(data) {
+                        var prediction = data.prediction;
+                        var resultElement = $('#result');
+                        resultElement.text('Prediction: ' + prediction);
+                        resultElement.removeClass('text-red-500 text-green-500'); // Remove previous classes
+                        if (prediction === 'FAKE News') {
+                            resultElement.addClass('text-red-500');
+                        } else {
+                            resultElement.addClass('text-green-500');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
